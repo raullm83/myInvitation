@@ -127,3 +127,4 @@ Example showing how to change the color/size of the icons:
 	width: 0.5712890625em;
 }
 
+#map-page, #map-canvas { width: 100%; height: 100%; padding: 0; }
