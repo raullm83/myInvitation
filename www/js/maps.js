@@ -1,64 +1,41 @@
-var map;
-var geocoder;
-function initialize() {
-  var mapOptions = {
-    zoom: 15,
-    mapTypeId: google.maps.MapTypeId.SATELLITE
-  };
-  geocoder = new google.maps.Geocoder();
-  map = new google.maps.Map(document.getElementById('map-canvas'),
-      mapOptions);
-  
-  geocoder.geocode( { 'address' : 'Costa ballena, rota'}, function(results, status) {
-    if (status == google.maps.GeocoderStatus.OK) {
-      map.setCenter(results[0].geometry.location);
-      var marker = new google.maps.Marker({
-          map: map,
-          position: results[0].geometry.location
-      });
-    } else {
-      alert('Geocode was not successful for the following reason: ' + status);
+
+function getUrlParameter(sParam)
+{
+    var sPageURL = decodeURIComponent(window.location.search.substring(1));
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) 
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) 
+        {
+            return sParameterName[1];
+        }
     }
-  });
-  
-  // Try HTML5 geolocation
-  /*if(navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      var pos = new google.maps.LatLng(position.coords.latitude,
-                                       position.coords.longitude);
+} 
 
-      var infowindow = new google.maps.InfoWindow({
-        map: map,
-        position: pos,
-        content: 'Location found using HTML5.'
-      });
-
-      map.setCenter(pos);
-    }, function() {
-      handleNoGeolocation(true);
-    });
-  } else {
-    // Browser doesn't support Geolocation
-    map.setCenter(myLatlng);
-    handleNoGeolocation(false);
-  }*/
+function initialize() {
+	var direccion = getUrlParameter('direccion');
+	direccion = direccion.replace(/\_/g, " ");
+	direccion = direccion.replace(/\%20/g, " ");
+	
+	
+	var geocoder = new google.maps.Geocoder();
+	var marker = new google.maps.Marker();
+	geocoder.geocode( { 'address': direccion}, function(results, status) {
+	    if (status == google.maps.GeocoderStatus.OK) {
+	    	marker = new google.maps.Marker({
+	        	map: map,
+	        	animation: google.maps.Animation.DROP,
+	        	position: results[0].geometry.location
+	      	});
+			map.setCenter(results[0].geometry.location);
+	    } else {
+	      	map.setCenter(new google.maps.LatLng( 40.4379543, -3.6795367 ));
+	    }
+  	});
+	var map = new google.maps.Map( document.getElementById( "map_canvas" ), {
+	    zoom: 15,
+	    mapTypeId: google.maps.MapTypeId.SATELLITE
+	} );
 }
 
-function handleNoGeolocation(errorFlag) {
-  if (errorFlag) {
-    var content = 'Error: The Geolocation service failed.';
-  } else {
-    var content = 'Error: Your browser doesn\'t support geolocation.';
-  }
-
-  var options = {
-    map: map,
-    position: new google.maps.LatLng(60, 105),
-    content: content
-  };
-
-  var infowindow = new google.maps.InfoWindow(options);
-  map.setCenter(options.position);
-}
-
-google.maps.event.addDomListener(window, 'load', initialize);

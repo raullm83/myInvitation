@@ -1,7 +1,10 @@
-<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="org.fdarb.myInvitation" version="1.0.0">
-  <name>myInvitation</name>
-  <description>Hello World sample application that responds to the deviceready event.</description>
-  <author href="http://phonegap.com" email="support@phonegap.com">PhoneGap Team</author>
+<widget xmlns="http://www.w3.org/ns/widgets" 
+	xmlns:gap="http://phonegap.com/ns/1.0" 
+	id="org.fdarb.eInvitacion" 
+	version="1.0.0">
+  <name>eInvitacion</name>
+  <description>Aplicación para mostrar los datos de una invitación</description>
+  <author href="raullm.83@gmail.com" email="raullm.83@gmail.com">Raúl Lima Miranda</author>
   <content src="index.html"/>
   <preference name="permissions" value="none"/>
   <preference name="orientation" value="default"/>
@@ -61,9 +64,11 @@
   <gap:splash src="www/res/screen/ios/screen-ipad-portrait.png" gap:platform="ios" width="768" height="1024"/>
   <gap:splash src="www/res/screen/ios/screen-ipad-landscape.png" gap:platform="ios" width="1024" height="768"/>
   <gap:splash src="www/res/screen/windows-phone/screen-portrait.jpg" gap:platform="winphone"/>
-  <access origin="*"/>
-  <access origin="tel:*" launch-external="yes" />
-  <access origin="mailto:*" launch-external="yes" />
+  <access origin="tel:*" launch-external="yes"/>
+  <access origin="geo:*" launch-external="yes"/>
+  <access origin="mailto:*" launch-external="yes"/>
+  <access origin="sms:*" launch-external="yes"/>
+  <access origin="market:*" launch-external="yes"/>
   <plugin name="cordova-plugin-whitelist" version="1"/>
   <allow-intent href="http://*/*"/>
   <allow-intent href="https://*/*"/>

@@ -45,5 +45,66 @@ var app = {
         receivedElement.setAttribute('style', 'display:block;');
 
         console.log('Received Event: ' + id);
-    }
+    },
+    openNativeAppWindow: function(data) {
+    window.open(data, '_system');
+}
 };
+
+// popup examples
+$( document ).on( "pagecreate", function() {
+    // The window width and height are decreased by 30 to take the tolerance of 15 pixels at each side into account
+    function scale( width, height, padding, border ) {
+        var scrWidth = $( window ).width() - 30,
+            scrHeight = $( window ).height() - 30,
+            ifrPadding = 2 * padding,
+            ifrBorder = 2 * border,
+            ifrWidth = width + ifrPadding + ifrBorder,
+            ifrHeight = height + ifrPadding + ifrBorder,
+            h, w;
+        if ( ifrWidth < scrWidth && ifrHeight < scrHeight ) {
+            w = ifrWidth;
+            h = ifrHeight;
+        } else if ( ( ifrWidth / scrWidth ) > ( ifrHeight / scrHeight ) ) {
+            w = scrWidth;
+            h = ( scrWidth / ifrWidth ) * ifrHeight;
+        } else {
+            h = scrHeight;
+            w = ( scrHeight / ifrHeight ) * ifrWidth;
+        }
+        return {
+            'width': w - ( ifrPadding + ifrBorder ),
+            'height': h - ( ifrPadding + ifrBorder )
+        };
+    };
+    $( ".ui-popup iframe" )
+        .attr( "width", 0 )
+        .attr( "height", "auto" );
+
+	$( "div[id^='popupMap'] iframe").each(function (index){
+		var idPopUp = "popupMap" + (1 + index);
+		var idPopUpFrame = idPopUp + " iframe";
+		$( "#" + idPopUpFrame ).contents().find( "#map_canvas" )
+        	.css( { "width" : 0, "height" : 0 } );
+	    $( "#" + idPopUp ).on({
+	        popupbeforeposition: function() {
+	            var size = scale( 480, 320, 0, 1 ),
+	                w = size.width,
+	                h = size.height;
+	            $( "#" + idPopUpFrame )
+	                .attr( "width", w )
+	                .attr( "height", h );
+	            $( "#" + idPopUpFrame ).contents().find( "#map_canvas" )
+	                .css( { "width": w, "height" : h } );
+	        },
+	        popupafterclose: function() {
+	            $( "#" + idPopUpFrame )
+	                .attr( "width", 0 )
+	                .attr( "height", 0 );
+	            $( "#" + idPopUpFrame ).contents().find( "#map_canvas" )
+	                .css( { "width": 0, "height" : 0 } );
+	        }
+	    });
+	});
+});
+
